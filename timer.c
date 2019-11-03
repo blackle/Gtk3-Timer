@@ -9,10 +9,12 @@
 #include <gtk/gtk.h>
 
 #include "duration_buffer.h"
+#include "alert_audio.h"
 
 typedef struct {
 	DurationBuffer *buffer;
 	GtkBuilder *builder;
+	AlertAudio *alert;
 	GTimer *timer;
 	guint timer_id;
 } TimerProgramState;
@@ -80,6 +82,12 @@ void stop_timer(TimerProgramState *state) {
 	}
 }
 
+void on_timer_finished(TimerProgramState *state) {
+	stop_timer (state);
+	alert_audio_play (state->alert);
+	//todo: UI changes?
+}
+
 gboolean on_timer_tick(TimerProgramState *state) {
 	unsigned seconds = duration_buffer_get_seconds (state->buffer);
 
@@ -91,7 +99,7 @@ gboolean on_timer_tick(TimerProgramState *state) {
 	gtk_progress_bar_set_fraction (progress, elapsed/seconds);
 
 	if (remaining <= 0) {
-		stop_timer (state);
+		on_timer_finished (state);
 	}
 
 	return TRUE;
@@ -135,10 +143,12 @@ void connect_numpad_buttons(TimerProgramState* state)
 int main(int argc, char** argv)
 { 
 	gtk_init (&argc, &argv);
+	alert_audio_init ();
 
 	TimerProgramState state = {
-		.buffer = new_duration_buffer (),
+		.buffer = duration_buffer_new (),
 		.builder = gtk_builder_new_from_resource ("/com/blackle/Timer/main.glade"),
+		.alert = alert_audio_new (),
 		.timer = NULL,
 		.timer_id = 0,
 	};
@@ -147,6 +157,7 @@ int main(int argc, char** argv)
 	g_signal_connect (get_widget (&state, "button_undo"), "clicked", G_CALLBACK(on_undo_clicked), &state);
 	g_signal_connect (get_widget (&state, "button_start"), "clicked", G_CALLBACK(on_start_clicked), &state);
 	g_signal_connect (get_widget (&state, "button_back"), "clicked", G_CALLBACK(on_back_clicked), &state);
+	update_duration_label (&state);
 
 	gtk_builder_connect_signals (state.builder, NULL);
 

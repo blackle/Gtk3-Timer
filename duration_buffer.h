@@ -3,7 +3,7 @@
 
 typedef struct DurationBuffer DurationBuffer;
 
-DurationBuffer* new_duration_buffer();
+DurationBuffer* duration_buffer_new();
 
 void duration_buffer_push_number(DurationBuffer* buff, gchar number);
 void duration_buffer_pop_number(DurationBuffer* buff);

@@ -19,7 +19,7 @@ struct DurationBuffer {
 	unsigned offset;
 };
 
-DurationBuffer* new_duration_buffer()
+DurationBuffer* duration_buffer_new()
 {
 	DurationBuffer* buff = g_new(DurationBuffer, 1);
 	memset(buff->data, '0', DURATION_BUFFER_SIZE);
