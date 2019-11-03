@@ -35,7 +35,7 @@ AlertAudio* alert_audio_new()
 		float fade = 1.;
 		add_fade(&fade, i, 50);
 		add_fade(&fade, ALERT_HIT_LENGTH - i - 1, 200);
-		audio->hit[i] = 20000. * sin((float)i)*fade;
+		audio->hit[i] = 20000. * sin((float)i * 1.3)*fade;
 	}
 
 	return audio;
