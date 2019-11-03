@@ -49,12 +49,11 @@
                 <property name="row_homogeneous">True</property>
                 <property name="column_homogeneous">True</property>
                 <child>
-                  <object class="GtkButton" id="button_1">
+                  <object class="GtkButton" id="numpad_button_1">
                     <property name="label">1</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_number_clicked" object="duration_text" swapped="no"/>
                     <accelerator key="1" signal="clicked"/>
                   </object>
                   <packing>
@@ -63,12 +62,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button_2">
+                  <object class="GtkButton" id="numpad_button_2">
                     <property name="label">2</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_number_clicked" object="duration_text" swapped="no"/>
                     <accelerator key="2" signal="clicked"/>
                   </object>
                   <packing>
@@ -77,12 +75,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button_3">
+                  <object class="GtkButton" id="numpad_button_3">
                     <property name="label">3</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_number_clicked" object="duration_text" swapped="no"/>
                     <accelerator key="3" signal="clicked"/>
                   </object>
                   <packing>
@@ -96,7 +93,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_start_clicked" object="main_stack" swapped="no"/>
                     <accelerator key="Return" signal="clicked"/>
                   </object>
                   <packing>
@@ -110,9 +106,8 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_undo_clicked" object="duration_text" swapped="no"/>
-                    <accelerator key="BackSpace" signal="clicked"/>
                     <accelerator key="z" signal="clicked" modifiers="GDK_CONTROL_MASK"/>
+                    <accelerator key="BackSpace" signal="clicked"/>
                   </object>
                   <packing>
                     <property name="left_attach">1</property>
@@ -120,12 +115,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button_0">
+                  <object class="GtkButton" id="numpad_button_0">
                     <property name="label">0</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_number_clicked" object="duration_text" swapped="no"/>
                     <accelerator key="0" signal="clicked"/>
                   </object>
                   <packing>
@@ -134,12 +128,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button_9">
+                  <object class="GtkButton" id="numpad_button_9">
                     <property name="label">9</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_number_clicked" object="duration_text" swapped="no"/>
                     <accelerator key="9" signal="clicked"/>
                   </object>
                   <packing>
@@ -148,12 +141,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button_8">
+                  <object class="GtkButton" id="numpad_button_8">
                     <property name="label">8</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_number_clicked" object="duration_text" swapped="no"/>
                     <accelerator key="8" signal="clicked"/>
                   </object>
                   <packing>
@@ -162,12 +154,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button_7">
+                  <object class="GtkButton" id="numpad_button_7">
                     <property name="label">7</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_number_clicked" object="duration_text" swapped="no"/>
                     <accelerator key="7" signal="clicked"/>
                   </object>
                   <packing>
@@ -176,12 +167,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button_6">
+                  <object class="GtkButton" id="numpad_button_6">
                     <property name="label">6</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_number_clicked" object="duration_text" swapped="no"/>
                     <accelerator key="6" signal="clicked"/>
                   </object>
                   <packing>
@@ -190,12 +180,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button_4">
+                  <object class="GtkButton" id="numpad_button_4">
                     <property name="label">4</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_number_clicked" object="duration_text" swapped="no"/>
                     <accelerator key="4" signal="clicked"/>
                   </object>
                   <packing>
@@ -204,12 +193,11 @@
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkButton" id="button_5">
+                  <object class="GtkButton" id="numpad_button_5">
                     <property name="label">5</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="receives_default">True</property>
-                    <signal name="clicked" handler="on_number_clicked" object="duration_text" swapped="no"/>
                     <accelerator key="5" signal="clicked"/>
                   </object>
                   <packing>
@@ -235,7 +223,7 @@
             <property name="visible">True</property>
             <property name="can_focus">False</property>
             <child>
-              <object class="GtkButton" id="back_button">
+              <object class="GtkButton" id="button_back">
                 <property name="label">gtk-go-back</property>
                 <property name="width_request">90</property>
                 <property name="height_request">40</property>
@@ -243,7 +231,6 @@
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
                 <property name="use_stock">True</property>
-                <signal name="clicked" handler="on_back_clicked" object="main_stack" swapped="no"/>
               </object>
               <packing>
                 <property name="x">10</property>
@@ -262,7 +249,18 @@
                 </attributes>
               </object>
               <packing>
-                <property name="y">100</property>
+                <property name="y">80</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkProgressBar" id="countdown_progress">
+                <property name="width_request">260</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+              </object>
+              <packing>
+                <property name="x">20</property>
+                <property name="y">200</property>
               </packing>
             </child>
           </object>
