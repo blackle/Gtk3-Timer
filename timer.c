@@ -2,52 +2,12 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include <string.h>
 
 #include <glib.h>
 #include <gio/gio.h>
 #include <gtk/gtk.h>
 
-#define DURATION_BUFFER_SIZE 6
-#define DURATION_BUFFER_INDEX(buff, k) ((buff->offset + k + DURATION_BUFFER_SIZE) % DURATION_BUFFER_SIZE)
-#define DURATION_BUFFER_AT(buff, k) (buff->data[DURATION_BUFFER_INDEX(buff, k)])
-
-typedef struct {
-	gchar data[DURATION_BUFFER_SIZE];
-	unsigned offset;
-} DurationBuffer;
-
-DurationBuffer* new_duration_buffer() {
-	DurationBuffer* buff = g_new(DurationBuffer, 1);
-	memset(buff->data, '0', DURATION_BUFFER_SIZE);
-	buff->offset = 0;
-	return buff;
-}
-
-void duration_buffer_push_number(DurationBuffer* buff, gchar number) {
-	buff->offset++;
-	buff->data[DURATION_BUFFER_INDEX(buff, -1)] = number;
-}
-
-void duration_buffer_pop_number(DurationBuffer* buff) {
-	buff->offset = DURATION_BUFFER_INDEX(buff, -1);
-	buff->data[buff->offset] = '0';
-}
-
-gchar* duration_buffer_format(const DurationBuffer* buff) {
-	gchar *formatted = g_strnfill(DURATION_BUFFER_SIZE + (DURATION_BUFFER_SIZE/2-1)*3, ' ');
-	int index = 0;
-	for (int i = 0; i < DURATION_BUFFER_SIZE; i++) {
-		if (i != 0 && i % 2 == 0) {
-			formatted[index + 1] = ':';
-			index += 3;
-		}
-
-		formatted[index] = DURATION_BUFFER_AT(buff, i);
-		index++;
-	}
-	return formatted;
-}
+#include "duration_buffer.h"
 
 DurationBuffer* global_buffer;
 
@@ -92,8 +52,6 @@ int main(int argc, char** argv)
 	GtkWidget *window = GTK_WIDGET(gtk_builder_get_object (builder, "main_window"));
 
 	gtk_widget_show_all (window);
-
 	gtk_main();
-
 	g_free(global_buffer);
 }

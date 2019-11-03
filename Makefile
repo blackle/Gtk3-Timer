@@ -1,7 +1,7 @@
 
 all : timer
 
-timer : timer.o resources.o
+timer : timer.o duration_buffer.o resources.o
 	gcc -o $@ $^ `pkg-config --libs gtk+-3.0` -rdynamic
 
 %.o : %.c
