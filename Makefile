@@ -2,12 +2,12 @@
 all : timer
 
 timer : timer.o resources.o
-	gcc -o $@ $^ `pkg-config --libs webkit2gtk-4.0` 
+	gcc -o $@ $^ `pkg-config --libs gtk+-3.0` -rdynamic
 
 %.o : %.c
-	gcc -c $< `pkg-config --cflags webkit2gtk-4.0` -O3 -Wall -Wextra -Werror -std=gnu11
+	gcc -c $< `pkg-config --cflags gtk+-3.0` -g -O3 -Wall -Wextra -Werror -std=gnu11 -rdynamic
 
-resources.c : resources.xml
+resources.c : resources.xml main.glade
 	glib-compile-resources resources.xml --generate-source
 
 clean :

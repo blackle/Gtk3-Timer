@@ -1,3 +1,4 @@
 timer
 *.o
 resources.c
+*.glade~

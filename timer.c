@@ -7,55 +7,93 @@
 #include <glib.h>
 #include <gio/gio.h>
 #include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
-#include <webkit2/webkit2.h>
 
-gboolean on_load_changed(WebKitWebView *web_view, WebKitLoadEvent load_event, GtkWindow* window)
-{
-	(void) web_view;
-	if (load_event == WEBKIT_LOAD_FINISHED) {
-		gtk_widget_show_all (GTK_WIDGET(window));
-		gtk_window_fullscreen (window);
-	}
-	return TRUE;
+#define DURATION_BUFFER_SIZE 6
+#define DURATION_BUFFER_INDEX(buff, k) ((buff->offset + k + DURATION_BUFFER_SIZE) % DURATION_BUFFER_SIZE)
+#define DURATION_BUFFER_AT(buff, k) (buff->data[DURATION_BUFFER_INDEX(buff, k)])
+
+typedef struct {
+	gchar data[DURATION_BUFFER_SIZE];
+	unsigned offset;
+} DurationBuffer;
+
+DurationBuffer* new_duration_buffer() {
+	DurationBuffer* buff = g_new(DurationBuffer, 1);
+	memset(buff->data, '0', DURATION_BUFFER_SIZE);
+	buff->offset = 0;
+	return buff;
 }
 
-static void
-gresource_uri_scheme_request_cb (WebKitURISchemeRequest *request, gpointer user_data)
-{
-	(void) user_data;
+void duration_buffer_push_number(DurationBuffer* buff, gchar number) {
+	buff->offset++;
+	buff->data[DURATION_BUFFER_INDEX(buff, -1)] = number;
+}
 
-	const gchar *path = webkit_uri_scheme_request_get_path (request);
-	printf("%s\n", path);
+void duration_buffer_pop_number(DurationBuffer* buff) {
+	buff->offset = DURATION_BUFFER_INDEX(buff, -1);
+	buff->data[buff->offset] = '0';
+}
 
-	GError *resource_error = NULL;
-	GInputStream *stream = g_resources_open_stream (path, G_RESOURCE_LOOKUP_FLAGS_NONE, &resource_error);
-	if (stream == NULL) {
-		webkit_uri_scheme_request_finish_error(request, resource_error);
-		return;
+gchar* duration_buffer_format(const DurationBuffer* buff) {
+	gchar *formatted = g_strnfill(DURATION_BUFFER_SIZE + (DURATION_BUFFER_SIZE/2-1)*3, ' ');
+	int index = 0;
+	for (int i = 0; i < DURATION_BUFFER_SIZE; i++) {
+		if (i != 0 && i % 2 == 0) {
+			formatted[index + 1] = ':';
+			index += 3;
+		}
+
+		formatted[index] = DURATION_BUFFER_AT(buff, i);
+		index++;
 	}
+	return formatted;
+}
 
-	webkit_uri_scheme_request_finish (request, stream, -1, "text/html");
-	g_object_unref (stream);
+DurationBuffer* global_buffer;
+
+void update_duration_label(GtkLabel* duration_label, const DurationBuffer* buff) {
+	gchar *formatted = duration_buffer_format(buff);
+	gtk_label_set_label(duration_label, formatted);
+	g_free(formatted);
+}
+
+void on_number_clicked(GtkButton *number_button, gpointer duration_label) {
+	const gchar* label = gtk_button_get_label (number_button);
+	duration_buffer_push_number(global_buffer, label[0]);
+
+	update_duration_label(GTK_LABEL(duration_label), global_buffer);
+}
+
+void on_undo_clicked(GtkButton *undo_button, gpointer duration_label) {
+	(void) undo_button;
+	duration_buffer_pop_number(global_buffer);
+
+	update_duration_label(GTK_LABEL(duration_label), global_buffer);
+}
+
+void on_start_clicked(GtkButton *start_button, gpointer stack) {
+	(void) start_button;
+	gtk_stack_set_visible_child_name (GTK_STACK(stack), "countdown_window");
+}
+
+void on_back_clicked(GtkButton *start_button, gpointer stack) {
+	(void) start_button;
+	gtk_stack_set_visible_child_name (GTK_STACK(stack), "timer_window");
 }
 
 int main(int argc, char** argv)
 { 
 	gtk_init(&argc, &argv);
+	global_buffer = new_duration_buffer();
 
-	GtkWidget *main_window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_default_size (GTK_WINDOW(main_window), 300, 300);
-	gtk_window_set_resizable (GTK_WINDOW(main_window), FALSE);
+	GtkBuilder *builder = gtk_builder_new_from_resource ("/com/blackle/Timer/main.glade");
+	gtk_builder_connect_signals (builder, NULL);
 
-	WebKitWebView *web_view = WEBKIT_WEB_VIEW(webkit_web_view_new ());
-	webkit_web_context_register_uri_scheme (webkit_web_context_get_default (), "gresource", gresource_uri_scheme_request_cb, NULL, NULL);
+	GtkWidget *window = GTK_WIDGET(gtk_builder_get_object (builder, "main_window"));
 
-	gtk_container_add (GTK_CONTAINER(main_window), GTK_WIDGET(web_view));
-
-	g_signal_connect (main_window, "destroy", gtk_main_quit, NULL);
-	g_signal_connect (web_view, "load-changed", G_CALLBACK(on_load_changed), (GtkWindow*)(main_window));
-
-	webkit_web_view_load_uri (web_view, "resource:///com/blackle/timer/index.html");
+	gtk_widget_show_all (window);
 
 	gtk_main();
+
+	g_free(global_buffer);
 }
