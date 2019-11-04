@@ -57,6 +57,10 @@ void update_countdown_label(TimerProgramState *state, double remaining) {
 
 void on_number_clicked(GtkButton *number_button, TimerProgramState *state)
 {
+	if (state->timer != NULL) {
+		return;
+	}
+
 	const gchar* label = gtk_button_get_label (number_button);
 	duration_buffer_push_number (state->buffer, label[0]);
 
@@ -66,6 +70,10 @@ void on_number_clicked(GtkButton *number_button, TimerProgramState *state)
 void on_undo_clicked(GtkButton *undo_button, TimerProgramState *state)
 {
 	(void) undo_button;
+	if (state->timer != NULL) {
+		return;
+	}
+
 	duration_buffer_pop_number (state->buffer);
 
 	update_duration_label (state);
@@ -114,6 +122,10 @@ void start_timer(TimerProgramState *state) {
 
 void on_start_clicked(GtkButton *start_button, TimerProgramState *state)
 {
+	if (state->timer != NULL) {
+		return;
+	}
+
 	(void) start_button;
 	start_timer (state);
 
